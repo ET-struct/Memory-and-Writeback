@@ -1,51 +1,59 @@
 `timescale 1ns / 1ps
-//Memory Stage: This uses the outputs of Execute Stage as well as combining the modules: and, data_memory, and mem_wb.
 
+// Memory Stage: This uses the outputs of Execute Stage as well as combining the modules: AND, data_memory, and mem_wb.
 module MEMORY(
-    input wire [1:0] wb_ctlout,
     input wire clk,
-    input wire branch, 
-    input wire memread, 
-    input wire memwrite,
-    input wire zero,
-    input wire [31:0] alu_result, 
-    input wire [31:0] rdata2out,
-    input wire [4:0] five_bit_muxout,
-    output wire MEM_PCSrc, //from AND gate
-    output wire MEM_WB_regwrite, 
-    output wire MEM_WB_memtoreg,
-    output wire [31:0] read_data,
-    output wire [31:0] mem_alu_result,
-    output wire [4:0] mem_write_reg
-    );
-    wire [31:0] read_data_in;
+    input wire [31:0] ALUResult,
+    input wire [31:0] WriteData,
+    input wire [4:0] WriteReg,
+    input wire [1:0] WBControl,
+    input wire MemWrite,
+    input wire MemRead,
+    input wire Branch,
+    input wire Zero,
+    output wire [31:0] ReadData,
+    output wire [31:0] ALUResult_out,
+    output wire [4:0] WriteReg_out,
+    output wire [1:0] WBControl_out,
+    output wire PCSrc
+);
 
-    // instantiations
- AND AND_4(
-    .membranch(branch),  
-    .zero(zero),
-    .PCSrc(MEM_PCSrc)
- );
- 
- data_memory data_memory4(
-    .clk(clk),
-    .addr(alu_result),
-    .write_data(rdata2out),
-    .memwrite(memwrite),
-    .memread(memread),
-    .read_data(read_data_in)
- );
- 
- mem_wb mem_wb4(
-    .clk(clk),
-    .control_wb_in(wb_ctlout), // inputs
-    .read_data_in(read_data_in),
-    .alu_result_in(alu_result),
-    .write_reg_in(five_bit_muxout),
-    .regwrite(MEM_WB_regwrite), //outputs
-    .memtoreg( MEM_WB_memtoreg),
-    .read_data(read_data),
-    .mem_alu_result(mem_alu_result),
-    .mem_write_reg(mem_write_reg)
- );
-endmodule  
+    wire [31:0] read_data_in;
+    wire regwrite_out;
+    wire memtoreg_out;
+
+    // Combine the 1-bit control signals into the 2-bit output the testbench expects
+    assign WBControl_out = {regwrite_out, memtoreg_out};
+
+    // Branch AND gate
+    AND AND_4(
+        .membranch(Branch),
+        .zero(Zero),
+        .PCSrc(PCSrc)
+    );
+
+    // Data Memory 
+    // (Removed .clk(clk) because data_memory.v does not have a clock port)
+    data_memory data_memory4(
+        .addr(ALUResult),
+        .write_data(WriteData),
+        .memwrite(MemWrite),
+        .memread(MemRead),
+        .read_data(read_data_in)
+    );
+
+    // MEM/WB Pipeline Latch
+    mem_wb mem_wb4(
+        .clk(clk),
+        .control_wb_in(WBControl),       // inputs
+        .read_data_in(read_data_in),
+        .alu_result_in(ALUResult),
+        .write_reg_in(WriteReg),
+        .regwrite(regwrite_out),         // outputs
+        .memtoreg(memtoreg_out),
+        .read_data(ReadData),
+        .mem_alu_result(ALUResult_out),
+        .mem_write_reg(WriteReg_out)
+    );
+
+endmodule
