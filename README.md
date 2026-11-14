@@ -17,7 +17,7 @@
 #### Architecture
 ##### Timing or Behavioral Summary
 
-![Timing Diagram](images/memoryTB_timing_diagram.png)
+![Timing Diagram](images/memoryTB_simulation.png)
 
 #### Implementation
 ##### Source Code
@@ -47,7 +47,7 @@ Verification covers:
 ##### Testbench and Waveform
 Save screenshots and waveform images in the repository's images/ folder.
 
-![Testbench Waveform](images/memoryTB_timing_diagram.png)
+![Testbench Waveform](images/memoryTB_simulation.png)
 
 The primary integrated testbench source is available [*here*](https://github.com/ET-struct/Memory-and-Writeback/blob/main/memoryTB.v).
 
@@ -84,7 +84,7 @@ vvp mem_sim
 .
 ├── README.md
 ├── images/
-│   └── memoryTB_timing_diagram.png
+│   └── memoryTB_simulation.png
 ├── AND.v
 ├── MEMORY.v
 ├── data.txt
