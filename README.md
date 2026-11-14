@@ -75,13 +75,13 @@ vvp mem_sim
 ```
 ##### Expected Output
 ```plaintext
-# Expected testbench monitor output (from data_memory.v initialization):
-	DMEM[0] = 0000_0000_0000_0000_0000_0000_0000_0000
-	DMEM[1] = 0000_0000_0000_0000_0000_0000_0000_0001
-	DMEM[2] = 0000_0000_0000_0000_0000_0000_0000_0010
-	DMEM[3] = 0000_0000_0000_0000_0000_0000_0000_0011
-	DMEM[4] = 0000_0000_0000_0000_0000_0000_0000_0100
-	DMEM[5] = 0000_0000_0000_0000_0000_0000_0000_0101
+# Expected testbench monitor output (from data_memory.v initialization, in Vivado):
+	DMEM[0] = 0
+	DMEM[1] = 1
+	DMEM[2] = 10
+	DMEM[3] = 11
+	DMEM[4] = 100
+	DMEM[5] = 101
 ```
 ##### Repository Organization
 ```plaintext
