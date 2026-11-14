@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 //Memory Stage: This uses the outputs of Execute Stage as well as combining the modules: and, data_memory, and mem_wb.
 
-module memory(
+module MEMORY(
     input wire [1:0] wb_ctlout,
     input wire clk,
     input wire branch, 
