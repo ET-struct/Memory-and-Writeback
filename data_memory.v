@@ -39,7 +39,7 @@ $display("\tDMEM[%0d] = %0d", 255, DMEM[255]);
 */
    end
    
-   always@(addr) begin
+    always@(*) begin
       if (memread) // load
       begin
       read_data <= DMEM[addr]; //grabs data at the address specified by the addr wire 
